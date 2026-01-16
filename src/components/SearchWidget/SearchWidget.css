@@ -1,0 +1,255 @@
+.search-widget {
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+  z-index: 10;
+}
+
+.search-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  top: 2px;
+}
+
+.tab-btn:hover {
+  color: #20b2aa;
+}
+
+.tab-btn.active {
+  color: #20b2aa;
+  border-bottom-color: #20b2aa;
+  font-weight: 600;
+}
+
+.search-form {
+  display: block;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.location-input,
+.passenger-input,
+.date-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.location-input:hover,
+.passenger-input:hover,
+.date-input:hover {
+  border-color: #20b2aa;
+  background: white;
+}
+
+.location-text {
+  flex: 1;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.swap-btn {
+  background: #20b2aa;
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.swap-btn:hover {
+  background: #1a9b94;
+}
+
+.form-select,
+.form-input {
+  padding: 0.9rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.form-input {
+  cursor: text;
+}
+
+.form-select:hover,
+.form-input:hover {
+  border-color: #20b2aa;
+  background: white;
+}
+
+.form-select:focus,
+.form-input:focus {
+  outline: none;
+  border-color: #20b2aa;
+  background: white;
+}
+
+.date-input {
+  position: relative;
+}
+
+.date-input i {
+  color: #666;
+  margin-right: 0.5rem;
+}
+
+.date-picker {
+  border: none;
+  background: transparent;
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.date-picker:focus {
+  outline: none;
+}
+
+.passenger-input span {
+  flex: 1;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.passenger-input i {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.promo-link {
+  color: #20b2aa;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.promo-link:hover {
+  color: #1a9b94;
+  text-decoration: underline;
+}
+
+.btn-search {
+  background: #20b2aa;
+  border: none;
+  color: white;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-search:hover {
+  background: #1a9b94;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(32, 178, 170, 0.4);
+}
+
+@media (max-width: 1024px) {
+  .form-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .search-widget {
+    width: 95%;
+    padding: 1.5rem;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    margin: -40px auto 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .btn-search {
+    width: 100%;
+  }
+
+  .tab-btn {
+    padding: 1rem;
+    flex: 1;
+    justify-content: center;
+  }
+}
+

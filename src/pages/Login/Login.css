@@ -1,0 +1,169 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FAFBFC;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0px 4px 32px rgba(17, 34, 17, 0.05);
+}
+
+.login-form-side {
+  flex: 1;
+  padding: 60px 80px;
+  max-width: 600px;
+}
+
+.login-image-side {
+  flex: 1;
+  background: #8DD3BB url('https://images.unsplash.com/photo-1436491865332-7a61a109c0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover;
+}
+
+.back-link {
+  text-decoration: none;
+  color: #112211;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 24px;
+}
+
+.login-title {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.login-subtitle {
+  color: #11221180;
+  margin-bottom: 40px;
+}
+
+.login-form .form-group {
+  margin-bottom: 24px;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #D7E2EE;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.forgot-password {
+  color: #FF8682;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 16px;
+  background: #8DD3BB;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.signup-prompt {
+  text-align: center;
+  font-size: 14px;
+  color: #112211;
+}
+
+.signup-prompt a {
+  color: #FF8682;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.social-login .divider {
+  text-align: center;
+  position: relative;
+  margin: 32px 0;
+}
+
+.social-login .divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #D7E2EE;
+  z-index: 1;
+}
+
+.social-login .divider span {
+  background: white;
+  padding: 0 16px;
+  position: relative;
+  z-index: 2;
+  color: #11221140;
+  font-size: 14px;
+}
+
+.social-btns {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.social-btn {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #8DD3BB;
+  background: white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .login-image-side {
+    display: none;
+  }
+  .login-form-side {
+    padding: 40px 20px;
+    max-width: 100%;
+  }
+}

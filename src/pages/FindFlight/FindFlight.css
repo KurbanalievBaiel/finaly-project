@@ -1,0 +1,110 @@
+.find-flight-page {
+  width: 100%;
+  min-height: 100vh;
+  background: white;
+}
+
+.nav-tabs {
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 0;
+  margin-top: 80px;
+}
+
+.tabs-wrapper {
+  display: flex;
+  gap: 0;
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  top: 1px;
+}
+
+.tab:hover {
+  color: #20b2aa;
+}
+
+.tab.active {
+  color: #20b2aa;
+  border-bottom-color: #20b2aa;
+  font-weight: 600;
+}
+
+.flight-hero {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 60px;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.35)),
+    url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1920&h=800&fit=crop')
+      center / cover no-repeat;
+}
+
+.flight-hero .hero-background {
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
+}
+
+.flight-hero .hero-content {
+  text-align: center;
+  color: white;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.flight-hero .hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+}
+
+.flight-hero .hero-subtitle {
+  font-size: 1.3rem;
+  opacity: 0.95;
+}
+
+@media (max-width: 768px) {
+  .nav-tabs {
+    margin-top: 70px;
+  }
+
+  .tab {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .flight-hero {
+    height: 400px;
+    margin-bottom: 40px;
+  }
+
+  .flight-hero .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .flight-hero .hero-subtitle {
+    font-size: 1rem;
+  }
+}
+

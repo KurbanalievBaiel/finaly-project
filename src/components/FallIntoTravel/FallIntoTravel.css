@@ -1,0 +1,197 @@
+.fall-into-travel {
+  padding: 80px 0;
+  background: white;
+}
+
+.fall-into-travel .section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 3rem;
+}
+
+.destinations-scroll {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.destinations-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.destinations-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.destinations-scroll::-webkit-scrollbar-thumb {
+  background: #20b2aa;
+  border-radius: 10px;
+}
+
+.destination-card {
+  min-width: 320px;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+
+.destination-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.destination-card .card-image {
+  width: 100%;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease;
+}
+
+.destination-card:hover .card-image {
+  transform: scale(1.05);
+}
+
+.destination-card .card-content {
+  padding: 1.5rem;
+}
+
+.destination-card .card-city {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.destination-card .card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.destination-card .card-price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #20b2aa;
+}
+
+.btn-book {
+  background: #20b2aa;
+  border: none;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-book:hover {
+  background: #1a9b94;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
+}
+
+.backpacking-section {
+  padding: 80px 0;
+  background: #f8f9fa;
+}
+
+.backpacking-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.backpacking-image {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background-size: cover;
+  background-position: center;
+}
+
+.backpacking-content {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.backpacking-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.backpacking-description {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  flex: 1;
+}
+
+.backpacking-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.backpacking-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #20b2aa;
+}
+
+@media (max-width: 1024px) {
+  .backpacking-card {
+    grid-template-columns: 1fr;
+  }
+
+  .backpacking-image {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fall-into-travel {
+    padding: 60px 0;
+  }
+
+  .fall-into-travel .section-title {
+    font-size: 2rem;
+  }
+
+  .destination-card {
+    min-width: 280px;
+  }
+
+  .backpacking-section {
+    padding: 60px 0;
+  }
+
+  .backpacking-content {
+    padding: 2rem;
+  }
+
+  .backpacking-title {
+    font-size: 2rem;
+  }
+}
+
