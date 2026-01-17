@@ -2,7 +2,7 @@
   background-color: #FAFBFC;
 }
 
-.stay-hero {
+/* .stay-hero {
   height: 400px;
   position: relative;
   display: flex;
@@ -10,7 +10,7 @@
   justify-content: center;
   text-align: center;
   color: white;
-}
+} */
 
 .stay-hero .hero-background {
   position: absolute;
