@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../../store/slices/authSlice';
+import { authAPI } from '../../api/api';
 import './Login.css';
 
 const Login = () => {
@@ -9,22 +10,32 @@ const Login = () => {
     email: 'user@example.com',
     password: 'password123'
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Имитация успешного входа
-    const mockUser = {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: formData.email,
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-    };
+    setLoading(true);
+    setError('');
     
-    dispatch(login({ user: mockUser, token: 'mock-jwt-token' }));
-    navigate('/');
+    try {
+      const response = await authAPI.login(formData.email, formData.password);
+      
+      if (response.success) {
+        const userData = response.data;
+        dispatch(login({ user: userData, token: userData.token }));
+        navigate('/');
+      } else {
+        setError(response.error || 'Login failed');
+      }
+    } catch (err) {
+      setError('An error occurred during login');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,6 +49,8 @@ const Login = () => {
           </div>
           
           <form className="login-form" onSubmit={handleSubmit}>
+            {error && <div className="error-message">{error}</div>}
+            
             <div className="form-group">
               <label>Email</label>
               <input 
@@ -46,6 +59,7 @@ const Login = () => {
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 placeholder="john.doe@gmail.com" 
                 required 
+                disabled={loading}
               />
             </div>
             <div className="form-group">
@@ -56,19 +70,22 @@ const Login = () => {
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 placeholder="••••••••" 
                 required 
+                disabled={loading}
               />
             </div>
             
             <div className="form-footer">
               <label className="checkbox-label">
-                <input type="checkbox" /> 
+                <input type="checkbox" disabled={loading} /> 
                 <span className="checkmark"></span>
                 Remember me
               </label>
               <a href="#" className="forgot-password">Forgot Password</a>
             </div>
             
-            <button type="submit" className="login-btn">Login</button>
+            <button type="submit" className="login-btn" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
             
             <p className="signup-prompt">
               Don’t have an account? <Link to="/signup">Sign up</Link>

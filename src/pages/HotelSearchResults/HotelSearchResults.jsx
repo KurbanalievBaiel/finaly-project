@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../../store/slices/authSlice';
+import { hotelAPI } from '../../api/api';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './HotelSearchResults.css';
@@ -10,8 +11,10 @@ const HotelSearchResults = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  // Состояние для активной сортировки
   const [activeTab, setActiveTab] = useState('best');
+  const [hotels, setHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   
   const { stays } = useSelector((state) => state.search);
   
@@ -24,8 +27,33 @@ const HotelSearchResults = () => {
     destination: stays.location || ''
   });
 
-  // Моковые данные отелей
-  const initialHotels = [
+  // Fetch hotels on component mount
+  useEffect(() => {
+    const fetchHotels = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await hotelAPI.getHotels();
+        if (response.success) {
+          setHotels(response.data);
+        } else {
+          setError(response.error || 'Failed to load hotels');
+          setHotels(mockHotels);
+        }
+      } catch (err) {
+        console.error('Error fetching hotels:', err);
+        setError('An error occurred while loading hotels');
+        setHotels(mockHotels);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHotels();
+  }, []);
+
+  // Моковые данные отелей как fallback
+  const mockHotels = [
     {
       id: 1,
       name: 'CVK Park Bosphorus Hotel Istanbul',
@@ -77,7 +105,7 @@ const HotelSearchResults = () => {
   ];
 
   // Логика фильтрации и сортировки
-  const filteredHotels = initialHotels.filter(hotel => {
+  const filteredHotels = hotels.filter(hotel => {
     if (hotel.price > filters.price) return false;
     // Search filter
     if (filters.destination && !hotel.location.toLowerCase().includes(filters.destination.toLowerCase().trim()) && !hotel.name.toLowerCase().includes(filters.destination.toLowerCase().trim())) return false;
@@ -127,6 +155,18 @@ const HotelSearchResults = () => {
   return (
     <div className="hotel-search-results">
       <Header />
+      
+      {loading && (
+        <div className="loading-message">
+          <p>Loading hotels...</p>
+        </div>
+      )}
+      
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
+        </div>
+      )}
       
       {/* Поисковая строка для отелей */}
       <div className="search-bar-section">
