@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { updateProfile, addCard } from '../../store/slices/authSlice';
+import { authAPI } from '../../api/api';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './Account.css';
 
 const Account = () => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('profile');
   const [editingField, setEditingField] = useState(null);
   const [editValue, setEditValue] = useState('');
   const [showAddCard, setShowAddCard] = useState(false);
   const [newCard, setNewCard] = useState({ number: '', expiry: '', brand: 'VISA' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
 
   const handleEdit = (field, value) => {
@@ -21,22 +24,38 @@ const Account = () => {
     setEditValue(value);
   };
 
-  const handleSave = () => {
-    const updateData = {};
-    if (editingField === 'Name') {
-      const [first, ...rest] = editValue.split(' ');
-      updateData.firstName = first || '';
-      updateData.lastName = rest.join(' ') || '';
-    } else if (editingField === 'Phone number') {
-      updateData.phone = editValue;
-    } else if (editingField === 'Date of birth') {
-      updateData.dob = editValue;
-    } else {
-      updateData[editingField.toLowerCase()] = editValue;
+  const handleSave = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const updateData = {};
+      if (editingField === 'Name') {
+        const [first, ...rest] = editValue.split(' ');
+        updateData.firstName = first || '';
+        updateData.lastName = rest.join(' ') || '';
+      } else if (editingField === 'Phone number') {
+        updateData.phone = editValue;
+      } else if (editingField === 'Date of birth') {
+        updateData.dob = editValue;
+      } else {
+        updateData[editingField.toLowerCase()] = editValue;
+      }
+      
+      const response = await authAPI.updateProfile(user.id, updateData, token);
+      
+      if (response.success) {
+        dispatch(updateProfile(updateData));
+        setEditingField(null);
+      } else {
+        setError(response.error || 'Failed to update profile');
+      }
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      setError('An error occurred while updating your profile');
+    } finally {
+      setLoading(false);
     }
-    
-    dispatch(updateProfile(updateData));
-    setEditingField(null);
   };
 
   const handleAddCard = (e) => {
@@ -58,7 +77,7 @@ const Account = () => {
   };
 
   // Если пользователь не авторизован, перенаправляем на логин
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
     }
@@ -75,6 +94,12 @@ const Account = () => {
   return (
     <div className="account-page">
       <Header />
+      
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
+        </div>
+      )}
       
       <div className="account-container-wrapper">
         <div className="container">

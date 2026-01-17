@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../../store/slices/authSlice';
+import { flightAPI } from '../../api/api';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './FlightSearchResults.css';
@@ -10,10 +11,12 @@ const FlightSearchResults = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  // State for active sorting
   const [activeTab, setActiveTab] = useState('best');
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   
-  const { flights } = useSelector((state) => state.search);
+  const { flights: searchParams } = useSelector((state) => state.search);
   
   // State for filters
   const [filters, setFilters] = useState({
@@ -22,12 +25,38 @@ const FlightSearchResults = () => {
     rating: '0+',
     airlines: [],
     trips: [],
-    fromTo: `${flights.from} - ${flights.to}`,
-    tripType: flights.tripType
+    fromTo: `${searchParams.from} - ${searchParams.to}`,
+    tripType: searchParams.tripType
   });
 
-  // Mock flight data
-  const initialFlights = [
+  // Fetch flights on component mount
+  useEffect(() => {
+    const fetchFlights = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await flightAPI.getFlights();
+        if (response.success) {
+          setFlights(response.data);
+        } else {
+          setError(response.error || 'Failed to load flights');
+          // Fallback to mock data if API fails
+          setFlights(mockFlights);
+        }
+      } catch (err) {
+        console.error('Error fetching flights:', err);
+        setError('An error occurred while loading flights');
+        setFlights(mockFlights);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFlights();
+  }, []);
+
+  // Mock flight data as fallback
+  const mockFlights = [
     {
       id: 1,
       airline: 'Emirates',
@@ -91,7 +120,7 @@ const FlightSearchResults = () => {
   ];
 
   // Logic for filtering and sorting
-  const filteredFlights = initialFlights.filter(flight => {
+  const filteredFlights = flights.filter(flight => {
     // Price filter
     if (flight.price > filters.price) return false;
     
@@ -160,6 +189,18 @@ const FlightSearchResults = () => {
   return (
     <div className="flight-search-results">
       <Header />
+      
+      {loading && (
+        <div className="loading-message">
+          <p>Loading flights...</p>
+        </div>
+      )}
+      
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
+        </div>
+      )}
       
       {/* Search Bar Wrapper */}
       <div className="search-bar-section">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { signup } from '../../store/slices/authSlice';
+import { authAPI } from '../../api/api';
 import './Signup.css';
 
 const Signup = () => {
@@ -13,22 +14,46 @@ const Signup = () => {
     password: '',
     confirmPassword: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Имитация регистрации
-    const mockUser = {
-      id: 2,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      avatar: null
-    };
+    setError('');
     
-    dispatch(signup({ user: mockUser, token: 'mock-jwt-token' }));
-    navigate('/');
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    setLoading(true);
+    
+    try {
+      const userData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password
+      };
+      
+      const response = await authAPI.signup(userData);
+      
+      if (response.success) {
+        const user = response.data;
+        dispatch(signup({ user, token: user.token }));
+        navigate('/');
+      } else {
+        setError(response.error || 'Signup failed');
+      }
+    } catch (err) {
+      setError('An error occurred during signup');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,6 +67,8 @@ const Signup = () => {
           </div>
           
           <form className="signup-form" onSubmit={handleSubmit}>
+            {error && <div className="error-message">{error}</div>}
+            
             <div className="form-row">
               <div className="form-group">
                 <label>First Name</label>
@@ -51,6 +78,7 @@ const Signup = () => {
                   onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                   placeholder="John" 
                   required 
+                  disabled={loading}
                 />
               </div>
               <div className="form-group">
@@ -61,6 +89,7 @@ const Signup = () => {
                   onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                   placeholder="Doe" 
                   required 
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -74,6 +103,7 @@ const Signup = () => {
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   placeholder="john.doe@gmail.com" 
                   required 
+                  disabled={loading}
                 />
               </div>
               <div className="form-group">
@@ -83,6 +113,7 @@ const Signup = () => {
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   placeholder="+1 234 567 890" 
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -95,6 +126,7 @@ const Signup = () => {
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 placeholder="••••••••" 
                 required 
+                disabled={loading}
               />
             </div>
 
@@ -106,16 +138,19 @@ const Signup = () => {
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                 placeholder="••••••••" 
                 required 
+                disabled={loading}
               />
             </div>
             
             <label className="checkbox-label term-label">
-              <input type="checkbox" required /> 
+              <input type="checkbox" required disabled={loading} /> 
               <span className="checkmark"></span>
               I agree to all the <a href="#">Terms</a> and <a href="#">Privacy Policies</a>
             </label>
             
-            <button type="submit" className="signup-btn">Create account</button>
+            <button type="submit" className="signup-btn" disabled={loading}>
+              {loading ? 'Creating account...' : 'Create account'}
+            </button>
             
             <p className="login-prompt">
               Already have an account? <Link to="/login">Login</Link>

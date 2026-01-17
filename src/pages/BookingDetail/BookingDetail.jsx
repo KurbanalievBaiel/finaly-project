@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { addBooking } from '../../store/slices/authSlice';
+import { bookingAPI } from '../../api/api';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './BookingDetail.css';
 
 const BookingDetail = () => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { isAuthenticated, user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,6 +23,9 @@ const BookingDetail = () => {
     paymentMethod: 'card-1' // Default to first card if exists
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   useEffect(() => {
     if (!bookingItem) {
       navigate('/');
@@ -33,17 +37,55 @@ const BookingDetail = () => {
 
   if (!bookingItem || !user) return null;
 
-  const handleBooking = () => {
-    dispatch(addBooking({
-      item: bookingItem,
-      type: bookingType
-    }));
-    navigate('/booking-success', { state: { item: bookingItem, type: bookingType } });
+  const handleBooking = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const bookingData = {
+        userId: user.id,
+        itemId: bookingItem.id,
+        type: bookingType,
+        travelerInfo: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone
+        },
+        paymentMethod: formData.paymentMethod,
+        itemDetails: bookingItem,
+        totalPrice: bookingItem.price + 45,
+        bookingDate: new Date().toISOString()
+      };
+
+      const response = await bookingAPI.createBooking(bookingData, token);
+
+      if (response.success) {
+        dispatch(addBooking({
+          item: bookingItem,
+          type: bookingType
+        }));
+        navigate('/booking-success', { state: { item: bookingItem, type: bookingType } });
+      } else {
+        setError(response.error || 'Booking failed');
+      }
+    } catch (err) {
+      console.error('Error creating booking:', err);
+      setError('An error occurred while creating your booking');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="booking-detail-page">
       <Header />
+      
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
+        </div>
+      )}
       
       <div className="container">
         <div className="booking-layout">
@@ -131,7 +173,9 @@ const BookingDetail = () => {
             </section>
 
             <div className="booking-actions">
-              <button className="confirm-booking-btn" onClick={handleBooking}>Confirm and Book</button>
+              <button className="confirm-booking-btn" onClick={handleBooking} disabled={loading}>
+                {loading ? 'Processing Booking...' : 'Confirm and Book'}
+              </button>
             </div>
           </div>
 
